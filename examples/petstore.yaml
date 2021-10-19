@@ -1,0 +1,19 @@
+# yaml-language-server: $abdicate-1.0.schema.json
+version: "1.0"
+
+baseImage: gcr.io/distroless/java
+friendlyName: petstore-ws
+domains:
+  - ecommerce
+components:
+  - pets
+requires:
+  databases:
+    orm:
+      alias: db
+      interface: mysql:5
+provides:
+  rest:
+    interface: http
+    x-url: /v1/
+    x-swagger-url: /swagger-ui.html

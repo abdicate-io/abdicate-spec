@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=abdicate-1.0.schema.json
+version: "1.0"
+
+friendlyName: my-website
+requires:
+  databases:
+    orm:
+      alias: db
+      interface: postgres:10
+    celery_broker:
+      alias: redis
+      interface: redis:5
+  services:
+    com.org.backend:celery_worker:
+      alias: celery
+provides:
+  website:
+    interface: http
+    x-port: 8000
