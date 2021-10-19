@@ -13,7 +13,7 @@ Convention
 
 ## Help
 
-See [examples](tree/master/examples) for more details.
+See [examples](https://github.com/abdicate-io/abdicate-spec/tree/main/examples) for more details.
 
 ## Installation
 
