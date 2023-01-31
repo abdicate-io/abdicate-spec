@@ -6,7 +6,9 @@ allowing the same model throughout the entire life of the applications and witho
 
 Knowledge encapsulation
 
-Application model
+Service model
+
+Deployment model
 
 Convention
 
@@ -45,4 +47,4 @@ provides:
 ```
 
 ## Inspiration
-Docker compose, Helm charts, Terraform, Juju, ...
+Docker compose, Helm charts, Disnix, Juju, ...

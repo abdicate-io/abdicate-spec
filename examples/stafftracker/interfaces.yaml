@@ -1,0 +1,24 @@
+version: "1.1"
+kind: Interface
+name: mysql:5
+outputs:
+  properties:
+    host: str 
+    port: int 
+    database: Optional[str]
+    username: str 
+    password: str 
+---
+version: "1.1"
+kind: Interface
+name: web-service
+outputs:
+  properties:
+    url: str 
+---
+version: "1.1"
+kind: Interface
+name: website
+outputs:
+  properties:
+    url: str 

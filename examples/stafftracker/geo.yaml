@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=abdicate-1.1.schema.json
+version: "1.1"
+kind: "Module"
+friendlyName: geoservice
+requires:
+  services:
+    zipcodes:
+      interface: zipcodes@web-service
+provides:
+  website:
+    interface: web-service
+    x-port: 8000
