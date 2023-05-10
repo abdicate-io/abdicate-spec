@@ -1,0 +1,6 @@
+version: "1.1"
+kind: InterfaceProvisioner
+name: mysql
+implementation: abdicate.pulumi.rds
+interfaces:
+  - mysql:5

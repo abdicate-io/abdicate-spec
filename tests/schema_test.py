@@ -38,6 +38,9 @@ class SchemaTests(unittest.TestCase):
 
         stafftracker = item.services['rooms']
 
+        # TODO: create service graph of all services
+        # TODO: add AutoWeave and Provisionable -> replace config with (Union[AutoWeave, Config]) or (Union[Provisionable, Config])
+
         service_model = create_model_service(stafftracker, item)
 
         Path('temp/schema-ui.json').write_text(service_model.schema_json(indent=4))

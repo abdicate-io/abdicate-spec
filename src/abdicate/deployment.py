@@ -5,9 +5,12 @@ from pydantic import BaseModel
 
 from ruamel.yaml import YAML
 
-from abdicate.model_1_1 import RootModel, Interface, Module, InterfaceWeaver, InterfaceProvisioner
+from abdicate.model_1_1 import RootModel, Interface, InterfaceReference, Module, InterfaceWeaver, InterfaceProvisioner
 from abdicate import parse_object
 
+
+def get_parent_interface(interface: InterfaceReference):
+    return interface.split('@', 1)[1]
 
 class DeploymentModel(BaseModel):
     interfaces: dict[str, Interface]
@@ -28,12 +31,17 @@ class DeploymentModel(BaseModel):
             'provisioners': dict(types.get(InterfaceProvisioner, [])),
             })
 
-    def get_interface_provider(self, interface: str) -> Module:
-        ...
     def get_interface_weaver(self, interface: str) -> InterfaceWeaver:
-        ...
+        parent_interface = get_parent_interface(interface)
+        for name, weaver in self.weavers.items():
+            if parent_interface in weaver.interfaces:
+                return weaver
+    
     def get_interface_provisioner(self, interface: str) -> InterfaceProvisioner:
-        ...
+        parent_interface = get_parent_interface(interface)
+        for name, provisioner in self.provisioners.items():
+            if parent_interface in provisioner.interfaces:
+                return provisioner
 
 
 def read_directory(directory: Path):
@@ -41,6 +49,7 @@ def read_directory(directory: Path):
     objects = []
     for path in directory.glob('*.yaml'):
         data = yaml.load_all(path)
+        print('read_directory', path)
         for d in data:
             if 'name' not in d:
                 d['name'] = str(path.stem)

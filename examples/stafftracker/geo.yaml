@@ -6,7 +6,10 @@ requires:
   services:
     zipcodes:
       interface: zipcodes@web-service
+  properties:
+    geo-url:
+      interface: https-url
 provides:
   website:
-    interface: web-service
+    interface: geo@web-service
     x-port: 8000

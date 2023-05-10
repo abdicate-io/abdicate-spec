@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=abdicate-1.1.schema.json
+version: "1.1"
+kind: "Module"
+friendlyName: zipcodes
+requires:
+  databases:
+    orm:
+      alias: db
+      interface: mysql:5
+provides:
+  service:
+    interface: zipcodes@web-service
+    x-port: 8000

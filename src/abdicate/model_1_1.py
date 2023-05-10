@@ -7,6 +7,7 @@ DNSNAME_REGEX = r'^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$'
 ARTIFACT_REGEX = r'^([a-z\-_\.]+)(:([a-z\-_]+))?$'
 IMAGE_TAG_REGEX = r'^(?:(?=[^:\/]{4,253})(?!-)[a-zA-Z0-9-]{1,63}(?<!-)(?:\.(?!-)[a-zA-Z0-9-]{1,63}(?<!-))*(?::[0-9]{1,5})?/)?((?![._-])(?:[a-z0-9._-]*)(?<![._-])(?:/(?![._-])[a-z0-9._-]*(?<![._-]))*)((?::(?![.-])[a-zA-Z0-9_.-]{1,128})|@sha256:[a-z0-9]+)?$'
 
+InterfaceReference = str
 
 class MountPermissionEnum(str, Enum):
     read = 'read'
@@ -42,7 +43,7 @@ class ExBaseModel(BaseModel):
 
 class Resource(ExBaseModel):
     alias: Optional[str] = None
-    interface: str
+    interface: InterfaceReference
 
 
 class Functional(ExBaseModel):
@@ -118,13 +119,13 @@ class Provided(ExBaseModel):
 from typing import Literal, Union
 
 class RootModel(ExBaseModel):
-    version: str
+    version: str = Field(..., repr=False)
 
 class Module(RootModel):
     """
     Dependencies and description of the module.
     """
-    kind: Literal['Module']
+    kind: Literal['Module'] = Field(..., repr=False)
     
     name: str
     
@@ -148,19 +149,19 @@ class Outputs(ExBaseModel):
     properties: Optional[Dict[constr(regex=ARTIFACT_REGEX), PropertyValidation]] = {}
 
 class Interface(RootModel):
-    kind: Literal['Interface']
+    kind: Literal['Interface'] = Field(..., repr=False)
     name: constr(regex=INTERFACE_REGEX)
     outputs: Optional[Outputs]
 
 
 class InterfaceWeaver(RootModel):
-    kind: Literal['InterfaceWeaver']
+    kind: Literal['InterfaceWeaver'] = Field(..., repr=False)
     name: str
     implementation: str
     interfaces: list[constr(regex=INTERFACE_REGEX)]
 
 class InterfaceProvisioner(RootModel):
-    kind: Literal['InterfaceProvisioner']
+    kind: Literal['InterfaceProvisioner'] = Field(..., repr=False)
     name: str
     implementation: str
     interfaces: list[constr(regex=INTERFACE_REGEX)]
