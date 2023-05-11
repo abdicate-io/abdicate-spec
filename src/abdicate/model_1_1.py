@@ -41,7 +41,7 @@ class ExBaseModel(BaseModel):
         return values
 
 
-class Resource(ExBaseModel):
+class ResourceReference(ExBaseModel):
     alias: Optional[str] = None
     interface: InterfaceReference
 
@@ -51,7 +51,7 @@ class Functional(ExBaseModel):
     components: Optional[List[str]] = Field(description='List of functional components this application belongs to.')
 
 
-class Database(Resource):
+class Database(ResourceReference):
     """
     A Database that will be utilized by the application
     These are databases for which the schema is managed by the application.
@@ -59,7 +59,7 @@ class Database(Resource):
     pass
 
 
-class DataStore(Resource):
+class DataStore(ResourceReference):
     """
     A dataStore that will be utilized by the application
     These are databases for which the application isn't the owner of the schemas.
@@ -67,14 +67,14 @@ class DataStore(Resource):
     permission: DSPermissionEnum = DSPermissionEnum.read
 
 
-class Service(Resource):
+class ServiceReference(ResourceReference):
     """
     A service that will be utilized by the application
     """
     pass
 
 
-class Queue(Resource):
+class Queue(ResourceReference):
     """
     A queue that will be utilized by the application
     """
@@ -86,14 +86,14 @@ class Queues(ExBaseModel):
     send: Optional[Dict[constr(regex=ARTIFACT_REGEX), Queue]] = Field(default={}, description='List queues with outgoing messages')
 
 
-class Property(Resource):
+class Property(ResourceReference):
     """
     A property that will be utilized by the application
     """
     pass
 
 
-class Mount(Resource):
+class Mount(ResourceReference):
     """
     A file or directory that will be utilized by the application
     """
@@ -103,7 +103,7 @@ class Mount(Resource):
 class Requires(ExBaseModel):
     databases: Optional[Dict[constr(regex=ARTIFACT_REGEX), Database]] = {}
     datastores: Optional[Dict[constr(regex=ARTIFACT_REGEX), DataStore]] = {}
-    services: Optional[Dict[constr(regex=ARTIFACT_REGEX), Service]] = {}
+    services: Optional[Dict[constr(regex=ARTIFACT_REGEX), ServiceReference]] = {}
     queues: Optional[Queues] = Field(default=Queues())
     properties: Optional[Dict[constr(regex=ARTIFACT_REGEX), Property]] = {}
     mounts: Optional[Dict[constr(regex=ARTIFACT_REGEX), Mount]] = {}
@@ -121,11 +121,11 @@ from typing import Literal, Union
 class RootModel(ExBaseModel):
     version: str = Field('1.1', repr=False)
 
-class Module(RootModel):
+class Service(RootModel):
     """
-    Dependencies and description of the module.
+    Dependencies and description of the service.
     """
-    kind: Literal['Module'] = Field(default='Module', repr=False)
+    kind: Literal['Service'] = Field(default='Service', repr=False)
     
     name: str
     
@@ -167,7 +167,7 @@ class InterfaceProvisioner(RootModel):
     interfaces: list[constr(regex=INTERFACE_REGEX)]
 
 class Root(ExBaseModel): 
-    __root__: Union[Module, Interface, InterfaceWeaver, InterfaceProvisioner] = Field(..., discriminator='kind')
+    __root__: Union[Service, Interface, InterfaceWeaver, InterfaceProvisioner] = Field(..., discriminator='kind')
 
     def __getattr__(self, name):
         return getattr(self.__root__, name)

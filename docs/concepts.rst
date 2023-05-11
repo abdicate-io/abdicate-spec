@@ -5,11 +5,11 @@ Concepts
 Service Model
 ------------
 
-:py:class:`abdicate.model_1_1.Module`
+:py:class:`abdicate.model_1_1.Service`
 
 Resource references and interfaces
 
-:py:class:`abdicate.model_1_1.Resource`
+:py:class:`abdicate.model_1_1.ResourceReference`
 
 Resource reference
 ------------------

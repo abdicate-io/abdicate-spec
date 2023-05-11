@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from ruamel.yaml import YAML
 
-from abdicate.model_1_1 import RootModel, Interface, InterfaceReference, Module, InterfaceWeaver, InterfaceProvisioner
+from abdicate.model_1_1 import RootModel, Interface, InterfaceReference, Service, InterfaceWeaver, InterfaceProvisioner
 from abdicate import parse_object
 
 
@@ -14,7 +14,7 @@ def get_parent_interface(interface: InterfaceReference):
 
 class DeploymentModel(BaseModel):
     interfaces: dict[str, Interface]
-    services: dict[str, Module]
+    services: dict[str, Service]
     weavers: dict[str, InterfaceWeaver]
     provisioners: dict[str, InterfaceProvisioner]
 
@@ -26,7 +26,7 @@ class DeploymentModel(BaseModel):
 
         return cls(**{
             'interfaces': dict(types.get(Interface, [])),
-            'services': dict(types.get(Module, [])),
+            'services': dict(types.get(Service, [])),
             'weavers': dict(types.get(InterfaceWeaver, [])),
             'provisioners': dict(types.get(InterfaceProvisioner, [])),
             })

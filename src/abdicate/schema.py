@@ -1,6 +1,6 @@
 from pydantic import create_model, Field
 
-from abdicate.model_1_1 import Interface, Module, ExBaseModel
+from abdicate.model_1_1 import Interface, Service, ExBaseModel
 
 from abdicate.deployment import DeploymentModel
 
@@ -33,7 +33,7 @@ def create_model_interface(interface: Interface):
     return create_model(interface.name, **fields)
 
 
-def create_model_service(service: Module, deployment_model: DeploymentModel):
+def create_model_service(service: Service, deployment_model: DeploymentModel):
     create_model_interface2 = memoize(create_model_interface)
     
     fields = {'__base__': ExBaseModel}
