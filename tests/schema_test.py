@@ -2,7 +2,7 @@ import unittest
 
 from pathlib import Path
 
-from abdicate.deployment import read_directory
+from abdicate.assembly import read_directory
 
 from abdicate.schema import create_model_interface, create_model_service
 

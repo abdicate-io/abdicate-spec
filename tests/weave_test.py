@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from ruamel.yaml import YAML
 
-from abdicate.deployment import read_directory
+from abdicate.assembly import read_directory
 
 from abdicate.weave import WeaveModel, Reference, InterfaceProvisioner
 

@@ -5,13 +5,13 @@ from pathlib import Path
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
 
-from abdicate.deployment import read_directory
+from abdicate.assembly import read_directory
 
 import logging
 
 log = logging.getLogger(__name__)
 
-class DeploymentTests(unittest.TestCase):
+class AssemblyModelTests(unittest.TestCase):
     def test_parse_stafftracker(self):
         directory = Path("examples/stafftracker")
         item = read_directory(directory)

@@ -12,14 +12,14 @@ from abdicate import parse_object
 def get_parent_interface(interface: InterfaceReference):
     return interface.split('@', 1)[1]
 
-class DeploymentModel(BaseModel):
+class AssemblyModel(BaseModel):
     interfaces: dict[str, Interface]
     services: dict[str, Service]
     weavers: dict[str, InterfaceWeaver]
     provisioners: dict[str, InterfaceProvisioner]
 
     @classmethod
-    def from_objects(cls, objects: list[RootModel]) -> "DeploymentModel":
+    def from_objects(cls, objects: list[RootModel]) -> "AssemblyModel":
         types = defaultdict(list)
         for k, v in map(lambda x: (type(x), x), objects):
             types[k].append((v.name, v))
@@ -54,4 +54,4 @@ def read_directory(directory: Path):
                 d['name'] = str(path.stem)
             objects.append(parse_object(d))
 
-    return DeploymentModel.from_objects(objects)
+    return AssemblyModel.from_objects(objects)

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from collections import defaultdict
 
-from abdicate.deployment import DeploymentModel
+from abdicate.assembly import AssemblyModel
 
 
 class Reference(BaseModel):
@@ -29,7 +29,7 @@ class WeaveModel(BaseModel):
     required: dict[InterfaceReference, list[Reference]]
 
     @classmethod
-    def from_model(cls, deployment_model: DeploymentModel) -> "WeaveModel":
+    def from_model(cls, deployment_model: AssemblyModel) -> "WeaveModel":
         required=defaultdict(list)
         provided=defaultdict(list)
         for service in deployment_model.services.values():
