@@ -40,7 +40,6 @@ def create_model_service(service: Module, deployment_model: DeploymentModel):
     for resource in ['services', 'databases']:
         resource_fields = {'__base__': ExBaseModel}
         for n, ser in getattr(service.requires, resource, {}).items():
-            print('bloop2', n)
             interface_name = ser.interface.split('@', 1)[-1]
             s = create_model_interface2(interface_name, deployment_model.interfaces[interface_name])
             resource_fields[n] = (s, Field(..., title=n))

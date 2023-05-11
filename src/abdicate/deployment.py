@@ -49,7 +49,6 @@ def read_directory(directory: Path):
     objects = []
     for path in directory.glob('*.yaml'):
         data = yaml.load_all(path)
-        print('read_directory', path)
         for d in data:
             if 'name' not in d:
                 d['name'] = str(path.stem)

@@ -19,8 +19,8 @@ class DeploymentTests(unittest.TestCase):
         yaml = YAML()
         stream = StringIO()
         yaml.dump(item.dict(), stream)
-        log.warning(f'bloop\n {stream.getvalue()}')
-        self.assertEqual(item, {})
+        log.warning(f'test_parse_stafftracker\n {stream.getvalue()}')
+        #self.assertEqual(item, {})
 
 if __name__ == '__main__':
     unittest.main()

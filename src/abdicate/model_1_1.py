@@ -119,13 +119,13 @@ class Provided(ExBaseModel):
 from typing import Literal, Union
 
 class RootModel(ExBaseModel):
-    version: str = Field(..., repr=False)
+    version: str = Field('1.1', repr=False)
 
 class Module(RootModel):
     """
     Dependencies and description of the module.
     """
-    kind: Literal['Module'] = Field(..., repr=False)
+    kind: Literal['Module'] = Field(default='Module', repr=False)
     
     name: str
     
@@ -149,19 +149,19 @@ class Outputs(ExBaseModel):
     properties: Optional[Dict[constr(regex=ARTIFACT_REGEX), PropertyValidation]] = {}
 
 class Interface(RootModel):
-    kind: Literal['Interface'] = Field(..., repr=False)
+    kind: Literal['Interface'] = Field(default='Interface', repr=False)
     name: constr(regex=INTERFACE_REGEX)
     outputs: Optional[Outputs]
 
 
 class InterfaceWeaver(RootModel):
-    kind: Literal['InterfaceWeaver'] = Field(..., repr=False)
+    kind: Literal['InterfaceWeaver'] = Field(default='InterfaceWeaver', repr=False)
     name: str
     implementation: str
     interfaces: list[constr(regex=INTERFACE_REGEX)]
 
 class InterfaceProvisioner(RootModel):
-    kind: Literal['InterfaceProvisioner'] = Field(..., repr=False)
+    kind: Literal['InterfaceProvisioner'] = Field(default='InterfaceProvisioner', repr=False)
     name: str
     implementation: str
     interfaces: list[constr(regex=INTERFACE_REGEX)]

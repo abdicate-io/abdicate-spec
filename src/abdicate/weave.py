@@ -1,77 +1,70 @@
-from pathlib import Path
-from glob import glob
+from abdicate.model_1_1 import Provided, Resource, ExBaseModel, InterfaceReference, InterfaceWeaver, InterfaceProvisioner
 
-from ruamel.yaml import YAML
-from abdicate import parse_object
-
-from abdicate.model_1_1 import Provided, Resource, Module, Interface, ExBaseModel, InterfaceReference, InterfaceWeaver, InterfaceProvisioner
-
-from pydantic import BaseModel, create_model
+from pydantic import BaseModel
 
 from collections import defaultdict
 
-import pprint
-pp = pprint.PrettyPrinter(depth=4)
+from abdicate.deployment import DeploymentModel
 
-from abdicate.deployment import DeploymentModel, read_directory
+
+class Reference(BaseModel):
+    service: str
+    path: list[str]
+
 
 class Weavable(BaseModel):
+    providers: list[Reference]
     weaver: InterfaceWeaver
-    services: list[str]
+    services: list[Reference]
+
 
 class Provisionable(BaseModel):
     provisioner: InterfaceProvisioner
-    services: list[str]
+    services: list[Reference]
+
 
 class WeaveModel(BaseModel):
     weavable: dict[InterfaceReference, Weavable]
     provisionable: dict[InterfaceReference, Provisionable]
-    required: dict[InterfaceReference, list[Module]]
+    required: dict[InterfaceReference, list[Reference]]
 
     @classmethod
     def from_model(cls, deployment_model: DeploymentModel) -> "WeaveModel":
-        # Loop over all modules and get specific interface refs
-        print('-'*40)
         required=defaultdict(list)
         provided=defaultdict(list)
         for module in deployment_model.services.values():
             resources = get_resources_for_module(module)
             for resource, parents in resources:
                 to_add = required if not type(resource) == Provided else provided
-                to_add[fully_qualified_interface_name(module, resource, parents)].append(module.friendlyName)
+                to_add[fully_qualified_interface_name(module, resource, parents)].append((module, parents[1:]))
 
         weavable={}
-        provisionable=defaultdict(list)
+        provisionable={}
+        manual={}
         for interface, modules in required.items():
+            references = list(map(lambda x: Reference(service=x[0].name, path=x[1]), modules))
             if interface in provided  and deployment_model.get_interface_weaver(interface):
-                weavable[interface] = Weavable(weaver=deployment_model.get_interface_weaver(interface), services=modules)
+                provider_references = list(map(lambda x: Reference(service=x[0].name, path=x[1]), provided[interface]))
+                weavable[interface] = Weavable(providers=provider_references, weaver=deployment_model.get_interface_weaver(interface), services=references)
             elif interface not in provided  and deployment_model.get_interface_provisioner(interface):
-                provisionable[interface] = Provisionable(provisioner=deployment_model.get_interface_provisioner(interface), services=modules)
-            
+                provisionable[interface] = Provisionable(provisioner=deployment_model.get_interface_provisioner(interface), services=references)
+            else:
+                manual[interface] = references
 
-        pp.pprint(required)
-        print('-'*40)
-        pp.pprint(provided)
-        print('-'*40)
-        pp.pprint(weavable)
-        print('-'*40)
-        pp.pprint(provisionable)
-        print('-'*40)
-        pp.pprint(deployment_model.provisioners)
-
-        return None
+        return cls(**{
+            'weavable': weavable,
+            'provisionable': provisionable,
+            'required': manual,
+            })
 
 
 def get_resources_for_module(d, parents=[]):
-    #print('_keyus', d.__class__.__name__,  list(map(lambda x: x.__name__, type.mro(type(d)))))
     derrived =  list(map(lambda x: x, type.mro(type(d))))
     if Resource in derrived or Provided in derrived:
-        #print('resource', type(d), d, parents)
         yield d, parents
     else:
         for a, b in d.__fields__.items():
             value = getattr(d, a)
-            #print('checking', a, isinstance(value, ExBaseModel), type(value))
             if isinstance(value, ExBaseModel):
                 yield from get_resources_for_module(value, [*parents, d, a])
             if isinstance(value, dict):
@@ -85,18 +78,9 @@ def get_resources_for_module(d, parents=[]):
 def is_interface_specific(interface_name: InterfaceReference):
     return '@' in interface_name
 
+
 def fully_qualified_interface_name(module, resource, parents):
     if is_interface_specific(resource.interface):
         return resource.interface
     else:
         return module.friendlyName+'-'+('-'.join(parents[1:]))+'@'+resource.interface
-
-
-if __name__ == '__main__':
-    directory = Path(r"C:/Local_Data/G000737/checkouts/aws/abdicate-spec/examples/stafftracker")
-
-    yaml=YAML(typ='safe')
-
-    model = read_directory(directory)
-
-    woven = WeaveModel.from_model(model)

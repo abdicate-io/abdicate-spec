@@ -7,8 +7,9 @@ _VERSIONS = {
     '1.1': model_1_1.Root,
 }
 
-def parse_object(object):
+def parse_object(object, context={}):
     version = object.get('version')
+    object.update(context)
     if version not in _VERSIONS:
         raise ValueError('Version "{}" not supported, choice from: {}'.format(version, ', '.join(_VERSIONS.keys())))
     obj = parse_obj_as(_VERSIONS.get(version), object)

@@ -11,7 +11,7 @@ class ExampleTests(unittest.TestCase):
     def test_parse_stafftracker(self):
         yaml=YAML(typ='safe')
         data = yaml.load(Path('examples/stafftracker/stafftracker.yaml'))
-        item = parse_object(data)
+        item = parse_object(data, context={'name': 'stafftracker'})
         print(item)
         self.assertEqual(item.requires.queues.receive, {})
         self.assertEqual(item.requires.databases, {})
