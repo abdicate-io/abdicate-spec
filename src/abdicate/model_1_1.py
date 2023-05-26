@@ -7,6 +7,7 @@ DNSNAME_REGEX = r'^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$'
 ARTIFACT_REGEX = r'^([a-z\-_\.]+)(:([a-z\-_]+))?$'
 IMAGE_TAG_REGEX = r'^(?:(?=[^:\/]{4,253})(?!-)[a-zA-Z0-9-]{1,63}(?<!-)(?:\.(?!-)[a-zA-Z0-9-]{1,63}(?<!-))*(?::[0-9]{1,5})?/)?((?![._-])(?:[a-z0-9._-]*)(?<![._-])(?:/(?![._-])[a-z0-9._-]*(?<![._-]))*)((?::(?![.-])[a-zA-Z0-9_.-]{1,128})|@sha256:[a-z0-9]+)?$'
 
+ServiceIdentifier = str
 InterfaceReference = str
 
 class MountPermissionEnum(str, Enum):
