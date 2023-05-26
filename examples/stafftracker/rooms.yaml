@@ -4,10 +4,10 @@ kind: "Service"
 friendlyName: rooms
 requires:
   databases:
-    orm:
+    database:
       alias: db
       interface: mysql:5
 provides:
-  service:
-    interface: web-service
+  website:
+    interface: rooms@web-service
     x-port: 8000
