@@ -9,6 +9,8 @@ requires:
   properties:
     geo-url:
       interface: https-url
+    shared-property:
+      interface: shared-property@https-url
 provides:
   website:
     interface: geo@web-service

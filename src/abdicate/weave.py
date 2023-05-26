@@ -22,11 +22,13 @@ class Provisionable(BaseModel):
     provisioner: InterfaceProvisioner
     services: list[Reference]
 
+class Required(BaseModel):
+    services: list[Reference]
 
 class WeaveModel(BaseModel):
     weavable: dict[InterfaceReference, Weavable]
     provisionable: dict[InterfaceReference, Provisionable]
-    required: dict[InterfaceReference, list[Reference]]
+    required: dict[InterfaceReference, Required]
 
     @classmethod
     def from_model(cls, deployment_model: AssemblyModel) -> "WeaveModel":
@@ -49,7 +51,7 @@ class WeaveModel(BaseModel):
             elif interface not in provided  and deployment_model.get_interface_provisioner(interface):
                 provisionable[interface] = Provisionable(provisioner=deployment_model.get_interface_provisioner(interface), services=references)
             else:
-                manual[interface] = references
+                manual[interface] = Required(services=references)
 
         return cls(**{
             'weavable': weavable,

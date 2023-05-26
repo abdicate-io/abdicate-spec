@@ -25,7 +25,7 @@ class BuildOrderModel(BaseModel):
                 g_list.append((name, s.service))
 
         for name, required in woven.required.items():
-            for s in required:
+            for s in required.services:
                 g_list.append((name, s.service))
 
 

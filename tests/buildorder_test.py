@@ -21,9 +21,12 @@ class BuildOrderTests(unittest.TestCase):
 
     def test_order(self):
         self.assertEqual(self.model.services, 
-                         ['zipcodes-requires-databases-orm@mysql:5', 'rooms-requires-databases-database@mysql:5', 
-                          'staff-requires-databases-db@mysql:5', 'geoservice-requires-properties-geo-url@https-url', 
-                          'zipcodes', 'rooms', 'staff', 'geo', 'stafftracker'])
+                         ['zipcodes-requires-databases-orm@mysql:5', 
+                          'rooms-requires-databases-database@mysql:5', 
+                          'staff-requires-databases-db@mysql:5', 
+                          'shared-property@https-url', 
+                          'geoservice-requires-properties-geo-url@https-url',
+                          'rooms', 'staff', 'zipcodes', 'geo', 'stafftracker'])
 
 if __name__ == '__main__':
     unittest.main()

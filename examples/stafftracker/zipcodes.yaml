@@ -7,6 +7,9 @@ requires:
     orm:
       alias: db
       interface: mysql:5
+  properties:
+    shared-property:
+      interface: shared-property@https-url
 provides:
   service:
     interface: zipcodes@web-service
