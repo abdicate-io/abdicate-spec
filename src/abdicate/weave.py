@@ -38,7 +38,7 @@ class WeaveModel(BaseModel):
             resources = get_resources_for_service(service)
             for resource, parents in resources:
                 to_add = required if not type(resource) == Provided else provided
-                to_add[fully_qualified_interface_name(service, resource, parents)].append((service, parents[1:]))
+                to_add[fully_qualified_interface_name(service, resource, parents)].append((service, parents))
 
         weavable={}
         provisionable={}
@@ -68,7 +68,7 @@ def get_resources_for_service(d, parents=[]):
         for a, b in d.__fields__.items():
             value = getattr(d, a)
             if isinstance(value, ExBaseModel):
-                yield from get_resources_for_service(value, [*parents, d, a])
+                yield from get_resources_for_service(value, [*parents, a])
             if isinstance(value, dict):
                 for k,v in value.items():
                     yield from get_resources_for_service(v, [*parents, a, k])
@@ -85,4 +85,4 @@ def fully_qualified_interface_name(service: Service, resource: ResourceReference
     if is_interface_specific(resource.interface):
         return resource.interface
     else:
-        return service.friendlyName+'-'+('-'.join(parents[1:]))+'@'+resource.interface
+        return service.friendlyName+'-'+('-'.join(parents))+'@'+resource.interface

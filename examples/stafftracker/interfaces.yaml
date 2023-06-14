@@ -29,3 +29,10 @@ name: https-url
 outputs:
   properties:
     value: str 
+---
+version: "1.1"
+kind: Interface
+name: cluster
+outputs:
+  properties:
+    name: str 

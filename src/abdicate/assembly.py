@@ -47,7 +47,7 @@ class AssemblyModel(BaseModel):
 def read_directory(directory: Path):
     yaml=YAML(typ='safe')
     objects = []
-    for path in directory.glob('*.yaml'):
+    for path in directory.rglob('*.yaml'):
         data = yaml.load_all(path)
         for d in data:
             if 'name' not in d:

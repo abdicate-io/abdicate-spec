@@ -40,11 +40,15 @@ class ExBaseModel(BaseModel):
             values[re.sub(pattern_regex, 'x_', k)] = values.pop(k)
 
         return values
-
+    
 
 class ResourceReference(ExBaseModel):
     alias: Optional[str] = None
     interface: InterfaceReference
+
+
+class Platform(ResourceReference):
+    pass
 
 
 class Functional(ExBaseModel):
@@ -134,6 +138,7 @@ class Service(RootModel):
     friendlyName: Optional[constr(regex=DNSNAME_REGEX)]
     functional: Optional[Functional]
 
+    platform: Optional[Platform]
     requires: Optional[Requires]
     provides: Optional[Dict[constr(regex=ARTIFACT_REGEX), Provided]]
 

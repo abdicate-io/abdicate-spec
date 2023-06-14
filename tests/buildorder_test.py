@@ -24,6 +24,7 @@ class BuildOrderTests(unittest.TestCase):
                          ['zipcodes-requires-databases-orm@mysql:5', 
                           'rooms-requires-databases-database@mysql:5', 
                           'staff-requires-databases-db@mysql:5', 
+                          'frontend@cluster',
                           'shared-property@https-url', 
                           'geoservice-requires-properties-geo-url@https-url',
                           'rooms', 'staff', 'zipcodes', 'geo', 'stafftracker'])

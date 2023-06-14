@@ -5,6 +5,8 @@ from abdicate.assembly import AssemblyModel, get_parent_interface
 from abdicate.weave import WeaveModel
 from abdicate.schema import create_model_interface, memoize
 
+from abdicate.buildorder import BuildOrderModel
+
 from typing import Union
 
 class AutoWeave(ExBaseModel):
@@ -58,6 +60,9 @@ if __name__ == '__main__':
     model = read_directory(directory)
     woven = WeaveModel.from_model(model)
     Path('temp/woven.json').write_text(woven.json(indent=4))
+
+    order = BuildOrderModel.from_model(woven)
+    Path('temp/order.json').write_text(order.json(indent=4))
 
     configuration_model = create_configuration_model(model, woven)
 
