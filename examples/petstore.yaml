@@ -3,10 +3,13 @@ version: "1.0"
 
 baseImage: gcr.io/distroless/java
 friendlyName: petstore-ws
-domains:
-  - ecommerce
-components:
-  - pets
+functional:
+  domains:
+    - ecommerce
+  components:
+    - pets
+  cost-centers:
+    - 781151
 requires:
   databases:
     orm:
