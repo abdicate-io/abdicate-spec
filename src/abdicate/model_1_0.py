@@ -48,6 +48,7 @@ class Functional(ExBaseModel):
     domains: Optional[List[str]] = Field(description='List of functional domains this application belongs to.')
     components: Optional[List[str]] = Field(description='List of functional components this application belongs to.')
     cost_centers: Optional[List[str]] = Field(alias='cost-centers', description='List of cost-centers this application belongs to.')
+    operational_owners: Optional[List[str]] = Field(alias='operational-owners', description='List of operational owners this application belongs to.')
 
 
 class Database(Resource):
