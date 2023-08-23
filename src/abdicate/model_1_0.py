@@ -4,6 +4,7 @@ from typing import Dict, Optional, List
 from pydantic import BaseModel, constr, Extra, root_validator, Field
 
 DNSNAME_REGEX = r'^(?![0-9]+$)(?!-)[a-zA-Z0-9-]{,63}(?<!-)$'
+PROPERTY_REGEX = r'^(?![0-9]+)(?!-)([a-zA-Z0-9\-_\.]+)(:([a-zA-Z0-9\-_]+))?$'
 ARTIFACT_REGEX = r'^([a-z\-_\.]+)(:([a-z\-_]+))?$'
 IMAGE_TAG_REGEX = r'^(?:(?=[^:\/]{4,253})(?!-)[a-zA-Z0-9-]{1,63}(?<!-)(?:\.(?!-)[a-zA-Z0-9-]{1,63}(?<!-))*(?::[0-9]{1,5})?/)?((?![._-])(?:[a-z0-9._-]*)(?<![._-])(?:/(?![._-])[a-z0-9._-]*(?<![._-]))*)((?::(?![.-])[a-zA-Z0-9_.-]{1,128})|@sha256:[a-z0-9]+)?$'
 
@@ -105,7 +106,7 @@ class Requires(ExBaseModel):
     datastores: Optional[Dict[constr(regex=ARTIFACT_REGEX), DataStore]]
     services: Optional[Dict[constr(regex=ARTIFACT_REGEX), Service]]
     queues: Optional[Queues]
-    properties: Optional[Dict[constr(regex=ARTIFACT_REGEX), Property]]
+    properties: Optional[Dict[constr(regex=PROPERTY_REGEX), Property]]
     mounts: Optional[Dict[constr(regex=ARTIFACT_REGEX), Mount]]
     
 

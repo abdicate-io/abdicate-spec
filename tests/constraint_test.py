@@ -4,9 +4,21 @@ import re
 
 from pydantic import parse_obj_as
 from pydantic.error_wrappers import ValidationError
-from abdicate.model_1_0 import ARTIFACT_REGEX, DNSNAME_REGEX, IMAGE_TAG_REGEX
+from abdicate.model_1_0 import PROPERTY_REGEX, ARTIFACT_REGEX, DNSNAME_REGEX, IMAGE_TAG_REGEX
 
 class ConstraintTests(unittest.TestCase):
+    def test_valid_property_ids(self):
+        for i, string in enumerate(['com.org.package:property', 'property', 'hello:property', 'test_test', 'test-test', 'property-sub-type1']):
+            with self.subTest(i=i, msg=string):
+                self.assertTrue(re.match(PROPERTY_REGEX, string), '{} does not match {}'.format(string, PROPERTY_REGEX))
+
+
+    def test_invalid_property_ids(self):
+        for i, string in enumerate(['1property-sub-type1', ':com.org.package:property']):
+            with self.subTest(i=i, msg=string):
+                self.assertFalse(re.match(PROPERTY_REGEX, string), '{} should not match {}'.format(string, PROPERTY_REGEX))
+
+
     def test_valid_artifact_ids(self):
         for i, string in enumerate(['com.org.package:artifact', 'artifact', 'test:test', 'test_test', 'test-test']):
             with self.subTest(i=i, msg=string):
@@ -36,7 +48,7 @@ class ConstraintTests(unittest.TestCase):
 
         for i, (string, expected) in enumerate(tests):
             with self.subTest(i=i, msg=string):
-                self.assertEquals(re.match(DNSNAME_REGEX, string) is not None, expected, '{} {} match {}'.format(string, ("doesn't" if expected else "does"), DNSNAME_REGEX))
+                self.assertEqual(re.match(DNSNAME_REGEX, string) is not None, expected, '{} {} match {}'.format(string, ("doesn't" if expected else "does"), DNSNAME_REGEX))
 
 
     def test_imagetags(self):
@@ -56,7 +68,7 @@ class ConstraintTests(unittest.TestCase):
 
         for i, (string, expected) in enumerate(tests):
             with self.subTest(i=i, msg=string):
-                self.assertEquals(re.match(IMAGE_TAG_REGEX, string) is not None, expected, '{} {} match {}'.format(string, ("doesn't" if expected else "does"), IMAGE_TAG_REGEX))
+                self.assertEqual(re.match(IMAGE_TAG_REGEX, string) is not None, expected, '{} {} match {}'.format(string, ("doesn't" if expected else "does"), IMAGE_TAG_REGEX))
 
 
 if __name__ == '__main__':
